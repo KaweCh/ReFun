@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XiaomiReFund.Domain", "Xiao
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XiaomiReFund.Application", "XiaomiReFund.Application\XiaomiReFund.Application.csproj", "{4028BB9B-9298-4D7D-BB78-28CA1DE328AC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XiaomiReFund.Infrastructure", "XiaomiReFund.Infrastructure\XiaomiReFund.Infrastructure.csproj", "{1B018046-D626-4A67-A57D-CF72E13244D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4028BB9B-9298-4D7D-BB78-28CA1DE328AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4028BB9B-9298-4D7D-BB78-28CA1DE328AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4028BB9B-9298-4D7D-BB78-28CA1DE328AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B018046-D626-4A67-A57D-CF72E13244D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B018046-D626-4A67-A57D-CF72E13244D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B018046-D626-4A67-A57D-CF72E13244D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B018046-D626-4A67-A57D-CF72E13244D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

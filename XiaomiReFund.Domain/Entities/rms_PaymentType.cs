@@ -8,19 +8,19 @@ namespace XiaomiReFund.Domain.Entities
 {
     public class rms_PaymentType
     {
-        public string PaymentType { get; private set; }
-        public string PaymentName { get; private set; }
-        public bool IsActive { get; private set; }
-        public int ModifiedBy { get; private set; }
-        public DateTime CreateDate { get; private set; }
-        public DateTime? UpdateDate { get; private set; }
+        public string PaymentType { get;  set; }
+        public string PaymentName { get;  set; }
+        public bool IsActive { get;  set; }
+        public int ModifiedBy { get;  set; }
+        public DateTime CreateDate { get;  set; }
+        public DateTime? UpdateDate { get;  set; }
 
         // Navigation properties
-        public virtual sys_Users ModifiedByUser { get; private set; }
-        public virtual ICollection<rmsAPI_Client_PaymentType> ClientPaymentTypes { get; private set; }
-        public virtual ICollection<rms_OrderRefund> OrderRefunds { get; private set; }
+        public virtual sys_Users ModifiedByUser { get;  set; }
+        public virtual ICollection<rmsAPI_Client_PaymentType> ClientPaymentTypes { get;  set; }
+        public virtual ICollection<rms_OrderRefund> OrderRefunds { get;  set; }
 
-        private rms_PaymentType()
+         rms_PaymentType()
         {
             // Required by EF Core
             ClientPaymentTypes = new List<rmsAPI_Client_PaymentType>();

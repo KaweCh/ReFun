@@ -8,27 +8,27 @@ namespace XiaomiReFund.Domain.Entities
 {
     public class rms_OrderRefund
     {
-        public int RefundID { get; private set; }
-        public string RequestID { get; private set; }
-        public string TerminalID { get; private set; }
-        public DateTime TransactionDate { get; private set; }
-        public string TransactionID { get; private set; }
-        public string PaymentType { get; private set; }
-        public decimal RefundAmount { get; private set; }
-        public byte TxnStatus { get; private set; }
-        public int ClientID { get; private set; }
-        public int ModifiedBy { get; private set; }
-        public DateTime CreateDate { get; private set; }
-        public DateTime? UpdateDate { get; private set; }
+        public int RefundID { get;  set; }
+        public string RequestID { get;  set; }
+        public string TerminalID { get;  set; }
+        public DateTime TransactionDate { get;  set; }
+        public string TransactionID { get;  set; }
+        public string PaymentType { get;  set; }
+        public decimal RefundAmount { get;  set; }
+        public byte TxnStatus { get;  set; }
+        public int ClientID { get;  set; }
+        public int ModifiedBy { get;  set; }
+        public DateTime CreateDate { get;  set; }
+        public DateTime? UpdateDate { get;  set; }
 
         // Navigation properties
-        public virtual rmsAPI_ClientSignOn Client { get; private set; }
-        public virtual rmsAPI_Client_TerminalID Terminal { get; private set; }
-        public virtual rms_PaymentType PaymentTypeEntity { get; private set; }
-        public virtual rms_OrderRefundStatus Status { get; private set; }
-        public virtual sys_Users ModifiedByUser { get; private set; }
+        public virtual rmsAPI_ClientSignOn Client { get;  set; }
+        public virtual rmsAPI_Client_TerminalID Terminal { get;  set; }
+        public virtual rms_PaymentType PaymentTypeEntity { get;  set; }
+        public virtual rms_OrderRefundStatus Status { get;  set; }
+        public virtual sys_Users ModifiedByUser { get;  set; }
 
-        private rms_OrderRefund()
+         rms_OrderRefund()
         {
             // Required by EF Core
         }

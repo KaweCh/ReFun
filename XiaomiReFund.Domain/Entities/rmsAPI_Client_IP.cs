@@ -8,20 +8,20 @@ namespace XiaomiReFund.Domain.Entities
 {
     public class rmsAPI_Client_IP
     {
-        public int SeqID { get; private set; }
-        public int ClientID { get; private set; }
-        public byte IPType { get; private set; } // 4 = IPv4, 6 = IPv6
-        public string IPAddress { get; private set; }
-        public bool IsAllowed { get; private set; }
-        public int ModifiedBy { get; private set; }
-        public DateTime CreateDate { get; private set; }
-        public DateTime? UpdateDate { get; private set; }
+        public int SeqID { get;  set; }
+        public int ClientID { get;  set; }
+        public byte IPType { get;  set; } // 4 = IPv4, 6 = IPv6
+        public string IPAddress { get;  set; }
+        public bool IsAllowed { get;  set; }
+        public int ModifiedBy { get;  set; }
+        public DateTime CreateDate { get;  set; }
+        public DateTime? UpdateDate { get;  set; }
 
         // Navigation properties
-        public virtual rmsAPI_ClientSignOn Client { get; private set; }
-        public virtual sys_Users ModifiedByUser { get; private set; }
+        public virtual rmsAPI_ClientSignOn Client { get;  set; }
+        public virtual sys_Users ModifiedByUser { get;  set; }
 
-        private rmsAPI_Client_IP()
+         rmsAPI_Client_IP()
         {
             // Required by EF Core
         }
