@@ -5,60 +5,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XiaomiReFund.Application.Commands.Callback.SendCallback
+namespace XiaomiReFund.Application.Queries.Inquiry.InquireRefundStatus
 {
     /// <summary>
-    /// ตัวตรวจสอบความถูกต้องของคำสั่งส่ง callback
+    /// ตัวตรวจสอบความถูกต้องของคำสั่งสอบถามสถานะการคืนเงิน
     /// </summary>
-    public class SendCallbackCommandValidator : AbstractValidator<SendCallbackCommand>
+    public class InquireRefundStatusQueryValidator : AbstractValidator<InquireRefundStatusQuery>
     {
         /// <summary>
-        /// สร้าง SendCallbackCommandValidator ใหม่
+        /// สร้าง InquireRefundStatusQueryValidator ใหม่
         /// </summary>
-        public SendCallbackCommandValidator()
+        public InquireRefundStatusQueryValidator()
         {
-            RuleFor(v => v.Status)
-                .NotEmpty().WithMessage("Status is required")
-                .MaximumLength(20).WithMessage("Status must not exceed 20 characters")
-                .Must(BeValidStatus).WithMessage("Status must be 'Approved' or 'Rejected'");
-
-            RuleFor(v => v.Msg)
-                .MaximumLength(255).WithMessage("Message must not exceed 255 characters");
-
-            RuleFor(v => v.TerminalID)
+            RuleFor(x => x.TerminalID)
                 .NotEmpty().WithMessage("Terminal ID is required")
                 .MaximumLength(8).WithMessage("Terminal ID must not exceed 8 characters");
 
-            RuleFor(v => v.TransactionDate)
+            RuleFor(x => x.TransactionDate)
                 .NotEmpty().WithMessage("Transaction Date is required")
                 .MaximumLength(10).WithMessage("Transaction Date must not exceed 10 characters")
                 .Matches(@"^\d{4}-\d{2}-\d{2}$").WithMessage("Transaction Date must be in format YYYY-MM-DD")
                 .Must(BeValidDate).WithMessage("Transaction Date must be a valid date");
 
-            RuleFor(v => v.TransactionID)
+            RuleFor(x => x.TransactionID)
                 .NotEmpty().WithMessage("Transaction ID is required")
                 .MaximumLength(50).WithMessage("Transaction ID must not exceed 50 characters");
 
-            RuleFor(v => v.RefundAmount)
+            RuleFor(x => x.RefundAmount)
                 .GreaterThan(0).WithMessage("Refund Amount must be greater than 0");
 
-            RuleFor(v => v.RequestID)
+            RuleFor(x => x.RequestID)
                 .NotEmpty().WithMessage("Request ID is required")
                 .MaximumLength(30).WithMessage("Request ID must not exceed 30 characters");
 
-            RuleFor(v => v.PaymentType)
+            RuleFor(x => x.PaymentType)
                 .NotEmpty().WithMessage("Payment Type is required")
                 .MaximumLength(20).WithMessage("Payment Type must not exceed 20 characters");
-        }
-
-        /// <summary>
-        /// ตรวจสอบว่าสถานะถูกต้องหรือไม่
-        /// </summary>
-        /// <param name="status">สถานะที่ต้องการตรวจสอบ</param>
-        /// <returns>true ถ้าสถานะถูกต้อง, false ถ้าไม่ถูกต้อง</returns>
-        private bool BeValidStatus(string status)
-        {
-            return status == "Approved" || status == "Rejected";
         }
 
         /// <summary>

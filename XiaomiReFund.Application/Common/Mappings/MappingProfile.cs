@@ -13,63 +13,80 @@ using XiaomiReFund.Domain.Entities;
 
 namespace XiaomiReFund.Application.Common.Mappings
 {
+    /// <summary>
+    /// โปรไฟล์การแมปข้อมูลสำหรับการแปลงระหว่างเอนทิตีและดีทีโอ
+    /// </summary>
     public class MappingProfile : Profile
     {
         public MappingProfile()
         {
-            // Auth mappings
+            // การแมปข้อมูลสำหรับการรับรองตัวตน
+            // แปลงคำขอรับรองตัวตนไปเป็นข้อมูลลูกค้า โดยข้าม password hash
             CreateMap<AuthenticateRequest, rmsAPI_ClientSignOn>()
                 .ForMember(dest => dest.ClientUserName, opt => opt.MapFrom(src => src.Username))
                 .ForMember(dest => dest.ClientPasswordHash, opt => opt.Ignore());
 
-            // PaymentType mappings
+            // การแมปประเภทการชำระเงิน
+            // แปลงเอนทิตีประเภทการชำระเงินเป็นการตอบกลับประเภทการชำระเงิน
             CreateMap<rms_PaymentType, PaymentTypeResponse>();
 
-            // Refund mappings
+            // การแมปข้อมูลการคืนเงิน
+            // แปลงคำขอสร้างการคืนเงินไปเป็นเอนทิตีการคืนเงิน
             CreateMap<CreateRefundRequest, rms_OrderRefund>()
-                .ForMember(dest => dest.RefundID, opt => opt.Ignore())
-                .ForMember(dest => dest.TransactionDate, opt => opt.MapFrom(src => DateTime.Parse(src.TransactionDate)))
-                .ForMember(dest => dest.TxnStatus, opt => opt.MapFrom(src => 0)) // Default to Processing
-                .ForMember(dest => dest.CreateDate, opt => opt.Ignore())
-                .ForMember(dest => dest.UpdateDate, opt => opt.Ignore());
+                .ForMember(dest => dest.RefundID, opt => opt.Ignore()) // ข้ามการแมป ID การคืนเงิน
+                .ForMember(dest => dest.TransactionDate, opt => opt.MapFrom(src => DateTime.Parse(src.TransactionDate))) // แปลงวันที่เป็นวัตถุ DateTime
+                .ForMember(dest => dest.TxnStatus, opt => opt.MapFrom(src => 0)) // ตั้งค่าสถานะเริ่มต้นเป็นกำลังดำเนินการ
+                .ForMember(dest => dest.CreateDate, opt => opt.Ignore()) // ข้ามวันที่สร้าง
+                .ForMember(dest => dest.UpdateDate, opt => opt.Ignore()); // ข้ามวันที่อัปเดท
 
+            // แปลงเอนทิตีการคืนเงินเป็นดีทีโอการคืนเงิน
             CreateMap<rms_OrderRefund, RefundDto>()
-                .ForMember(dest => dest.TransactionDate, opt => opt.MapFrom(src => src.TransactionDate.ToString("yyyy-MM-dd")));
+                .ForMember(dest => dest.TransactionDate, opt => opt.MapFrom(src => src.TransactionDate.ToString("yyyy-MM-dd"))); // แปลงวันที่เป็นสตริง
 
+            // แปลงเอนทิตีการคืนเงินเป็นดีทีโอสถานะการคืนเงิน
             CreateMap<rms_OrderRefund, RefundStatusDto>()
-                .ForMember(dest => dest.StatusDescription, opt => opt.MapFrom(src => src.Status.StatusDescription))
-                .ForMember(dest => dest.PaymentName, opt => opt.MapFrom(src => src.PaymentTypeEntity.PaymentName));
+                .ForMember(dest => dest.StatusDescription, opt => opt.MapFrom(src => src.Status.StatusDescription)) // แมปคำอธิบายสถานะ
+                .ForMember(dest => dest.PaymentName, opt => opt.MapFrom(src => src.PaymentTypeEntity.PaymentName)); // แมปชื่อการชำระเงิน
 
-            // Inquiry mappings
+            // การแมปข้อมูลการสอบถาม
+            // แปลงคำขอสถานะการคืนเงินเป็นเอนทิตีการคืนเงิน
             CreateMap<InquireRefundStatusRequest, rms_OrderRefund>()
-                .ForMember(dest => dest.RefundID, opt => opt.Ignore())
-                .ForMember(dest => dest.TransactionDate, opt => opt.MapFrom(src => DateTime.Parse(src.TransactionDate)))
-                .ForMember(dest => dest.TxnStatus, opt => opt.Ignore())
-                .ForMember(dest => dest.ClientID, opt => opt.Ignore())
-                .ForMember(dest => dest.ModifiedBy, opt => opt.Ignore())
-                .ForMember(dest => dest.CreateDate, opt => opt.Ignore())
-                .ForMember(dest => dest.UpdateDate, opt => opt.Ignore());
+                .ForMember(dest => dest.RefundID, opt => opt.Ignore()) // ข้ามการแมป ID การคืนเงิน
+                .ForMember(dest => dest.TransactionDate, opt => opt.MapFrom(src => DateTime.Parse(src.TransactionDate))) // แปลงวันที่เป็นวัตถุ DateTime
+                .ForMember(dest => dest.TxnStatus, opt => opt.Ignore()) // ข้ามสถานะธุรกรรม
+                .ForMember(dest => dest.ClientID, opt => opt.Ignore()) // ข้ามรหัสลูกค้า
+                .ForMember(dest => dest.ModifiedBy, opt => opt.Ignore()) // ข้ามผู้แก้ไข
+                .ForMember(dest => dest.CreateDate, opt => opt.Ignore()) // ข้ามวันที่สร้าง
+                .ForMember(dest => dest.UpdateDate, opt => opt.Ignore()); // ข้ามวันที่อัปเดท
 
-            // Callback mappings
+            // การแมปข้อมูลการเรียกกลับ
+            // แปลงเอนทิตีการคืนเงินเป็นคำขอส่งการเรียกกลับ
             CreateMap<rms_OrderRefund, SendCallbackRequest>()
-                .ForMember(dest => dest.TransactionDate, opt => opt.MapFrom(src => src.TransactionDate.ToString("yyyy-MM-dd")))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => GetStatusText(src.TxnStatus)))
-                .ForMember(dest => dest.Msg, opt => opt.MapFrom(src => src.Status.StatusDescription));
+                .ForMember(dest => dest.TransactionDate, opt => opt.MapFrom(src => src.TransactionDate.ToString("yyyy-MM-dd"))) // แปลงวันที่เป็นสตริง
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => GetStatusText(src.TxnStatus))) // แปลงรหัสสถานะเป็นข้อความ
+                .ForMember(dest => dest.Msg, opt => opt.MapFrom(src => src.Status.StatusDescription)); // แมปข้อความสถานะ
 
+            // แปลงเอนทิตีการคืนเงินเป็นคำขอคิวการเรียกกลับ
             CreateMap<rms_OrderRefund, EnqueueCallbackRequest>()
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => GetStatusText(src.TxnStatus)))
-                .ForMember(dest => dest.StatusMessage, opt => opt.MapFrom(src => src.Status.StatusDescription))
-                .ForMember(dest => dest.RetryCount, opt => opt.MapFrom(src => 0))
-                .ForMember(dest => dest.ScheduledTime, opt => opt.MapFrom(src => DateTime.Now));
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => GetStatusText(src.TxnStatus))) // แปลงรหัสสถานะเป็นข้อความ
+                .ForMember(dest => dest.StatusMessage, opt => opt.MapFrom(src => src.Status.StatusDescription)) // แมปข้อความสถานะ
+                .ForMember(dest => dest.RetryCount, opt => opt.MapFrom(src => 0)) // ตั้งค่าจำนวนการลองใหม่เป็น 0
+                .ForMember(dest => dest.ScheduledTime, opt => opt.MapFrom(src => DateTime.Now)); // ตั้งเวลาที่กำหนดเป็นเวลาปัจจุบัน
         }
 
+        /// <summary>
+        /// แปลงรหัสสถานะเป็นข้อความสถานะ
+        /// </summary>
+        /// <param name="statusCode">รหัสสถานะธุรกรรม</param>
+        /// <returns>ข้อความสถานะ</returns>
         private static string GetStatusText(byte statusCode)
         {
+            // แปลงรหัสสถานะเป็นข้อความที่เข้าใจง่าย
             return statusCode switch
             {
-                1 => "Approved",
-                2 => "Rejected",
-                _ => "Processing"
+                1 => "Approved", // สถานะอนุมัติ
+                2 => "Rejected", // สถานะปฏิเสธ
+                _ => "Processing" // สถานะเริ่มต้นหรือกำลังดำเนินการ
             };
         }
     }
