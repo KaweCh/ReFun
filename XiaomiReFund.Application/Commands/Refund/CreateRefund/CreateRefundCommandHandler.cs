@@ -8,6 +8,7 @@ using XiaomiReFund.Application.Common.Exceptions;
 using XiaomiReFund.Application.Common.Interfaces;
 using XiaomiReFund.Application.Common.Models;
 using XiaomiReFund.Application.DTOs.Refund;
+using XiaomiReFund.Domain.Constants;
 using XiaomiReFund.Domain.Interfaces.Repositories;
 
 namespace XiaomiReFund.Application.Commands.Refund.CreateRefund
@@ -56,9 +57,9 @@ namespace XiaomiReFund.Application.Commands.Refund.CreateRefund
                     {
                         Result = new ResultData
                         {
-                            StatusCode = 409,
-                            Status = "Existed",
-                            Msg = "Already Requested"
+                            StatusCode = RefundConstants.ApiStatusCode.Conflict,
+                            Status = RefundConstants.ApiStatusMessage.Existed,
+                            Msg = RefundConstants.ApiResponseMessage.AlreadyRequested
                         },
                         Request = new RefundDto
                         {
@@ -76,7 +77,7 @@ namespace XiaomiReFund.Application.Commands.Refund.CreateRefund
                 var paymentType = await _paymentTypeRepository.GetPaymentTypeByCodeAsync(request.PaymentType);
                 if (paymentType == null)
                 {
-                    throw new ApiException("Invalid Payment Type", 400, "Bad Request");
+                    throw new ApiException("Invalid Payment Type", RefundConstants.ApiStatusCode.BadRequest, RefundConstants.ApiStatusMessage.BadRequest);
                 }
 
                 // ตรวจสอบว่าประเภทการชำระเงินเปิดใช้งานสำหรับเทอร์มินัลนี้หรือไม่
@@ -84,13 +85,13 @@ namespace XiaomiReFund.Application.Commands.Refund.CreateRefund
                     request.TerminalID, request.PaymentType);
                 if (!isAllowed)
                 {
-                    throw new ApiException("Payment Type not allowed for this terminal", 400, "Bad Request");
+                    throw new ApiException("Payment Type not allowed for this terminal", RefundConstants.ApiStatusCode.BadRequest, RefundConstants.ApiStatusMessage.BadRequest);
                 }
 
                 // แปลงวันที่ทำรายการ
                 if (!DateTime.TryParse(request.TransactionDate, out DateTime transactionDate))
                 {
-                    throw new ApiException("Invalid Transaction Date format", 400, "Bad Request");
+                    throw new ApiException("Invalid Transaction Date format", RefundConstants.ApiStatusCode.BadRequest, RefundConstants.ApiStatusMessage.BadRequest);
                 }
 
                 // สร้างรายการคืนเงินใหม่
@@ -109,9 +110,9 @@ namespace XiaomiReFund.Application.Commands.Refund.CreateRefund
                 {
                     Result = new ResultData
                     {
-                        StatusCode = 200,
-                        Status = "Accepted",
-                        Msg = "Your request has been accepted"
+                        StatusCode = RefundConstants.ApiStatusCode.Success,
+                        Status = RefundConstants.ApiStatusMessage.Success,
+                        Msg = RefundConstants.ApiResponseMessage.RequestAccepted
                     },
                     Request = new RefundDto
                     {

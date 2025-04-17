@@ -86,13 +86,13 @@ namespace XiaomiReFund.Application.Queries.Inquiry.InquireRefundStatus
                 switch (refund.TxnStatus)
                 {
                     case RefundConstants.TransactionStatus.Approved:
-                        statusMessage = "Approved";
+                        statusMessage = RefundConstants.CallbackStatus.Approved;
                         break;
                     case RefundConstants.TransactionStatus.Rejected:
-                        statusMessage = "Rejected";
+                        statusMessage = RefundConstants.CallbackStatus.Rejected;
                         break;
                     default:
-                        statusMessage = "Processing";
+                        statusMessage = RefundConstants.CallbackStatus.Processing;
                         break;
                 }
 

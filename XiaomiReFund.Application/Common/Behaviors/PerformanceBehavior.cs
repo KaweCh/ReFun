@@ -24,7 +24,7 @@ namespace XiaomiReFund.Application.Common.Behaviors
         // บริการดึงข้อมูลผู้ใช้ปัจจุบัน
         private readonly ICurrentUserService _currentUserService;
 
-        // บริการบันทึกログแบบกำหนดเอง
+        // บริการบันทึกแบบกำหนดเอง
         private readonly ILoggerService _loggerService;
 
         // Constructor รับ dependencies ผ่าน Dependency Injection

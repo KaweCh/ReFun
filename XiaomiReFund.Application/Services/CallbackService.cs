@@ -253,9 +253,11 @@ namespace XiaomiReFund.Application.Services
         /// </summary>
         /// <param name="request">ข้อมูลคำขอส่ง callback</param>
         /// <param name="retryCount">จำนวนครั้งที่ลองแล้ว</param>
+        // This is the method inside CallbackService.cs that needs to be updated
+
         private async Task EnqueueCallbackForRetryAsync(SendCallbackRequest request, int retryCount)
         {
-            // คำนวณเวลาที่จะลองใหม่
+            // Calculate retry delay based on retry count using exponential backoff
             var delayInMinutes = retryCount switch
             {
                 0 => _callbackSettings.RetryDelayMinutes,
@@ -267,7 +269,7 @@ namespace XiaomiReFund.Application.Services
 
             var scheduledTime = _dateTime.UtcNow.AddMinutes(delayInMinutes);
 
-            // ค้นหา RefundID จาก TerminalID และ RequestID
+            // Find RefundID from TerminalID and RequestID
             var refund = await _refundRepository.GetByTerminalAndRequestIdAsync(
                 request.TerminalID, request.RequestID);
 
@@ -278,7 +280,7 @@ namespace XiaomiReFund.Application.Services
                 return;
             }
 
-            // สร้างคำขอเพิ่มเข้าคิว
+            // Create enqueue request
             var enqueueRequest = new EnqueueCallbackRequest
             {
                 RefundID = refund.RefundID,
@@ -294,7 +296,7 @@ namespace XiaomiReFund.Application.Services
                 ScheduledTime = scheduledTime
             };
 
-            // บันทึกลงในระบบคิว
+            // Save to queue
             await EnqueueCallbackAsync(enqueueRequest);
         }
     }

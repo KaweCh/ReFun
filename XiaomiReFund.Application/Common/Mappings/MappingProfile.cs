@@ -9,6 +9,7 @@ using XiaomiReFund.Application.DTOs.Callback;
 using XiaomiReFund.Application.DTOs.Inquiry;
 using XiaomiReFund.Application.DTOs.PaymentType;
 using XiaomiReFund.Application.DTOs.Refund;
+using XiaomiReFund.Domain.Constants;
 using XiaomiReFund.Domain.Entities;
 
 namespace XiaomiReFund.Application.Common.Mappings
@@ -35,7 +36,7 @@ namespace XiaomiReFund.Application.Common.Mappings
             CreateMap<CreateRefundRequest, rms_OrderRefund>()
                 .ForMember(dest => dest.RefundID, opt => opt.Ignore()) // ข้ามการแมป ID การคืนเงิน
                 .ForMember(dest => dest.TransactionDate, opt => opt.MapFrom(src => DateTime.Parse(src.TransactionDate))) // แปลงวันที่เป็นวัตถุ DateTime
-                .ForMember(dest => dest.TxnStatus, opt => opt.MapFrom(src => 0)) // ตั้งค่าสถานะเริ่มต้นเป็นกำลังดำเนินการ
+                .ForMember(dest => dest.TxnStatus, opt => opt.MapFrom(src => RefundConstants.TransactionStatus.Processing)) // ตั้งค่าสถานะเริ่มต้นเป็นกำลังดำเนินการ
                 .ForMember(dest => dest.CreateDate, opt => opt.Ignore()) // ข้ามวันที่สร้าง
                 .ForMember(dest => dest.UpdateDate, opt => opt.Ignore()); // ข้ามวันที่อัปเดท
 
@@ -81,12 +82,12 @@ namespace XiaomiReFund.Application.Common.Mappings
         /// <returns>ข้อความสถานะ</returns>
         private static string GetStatusText(byte statusCode)
         {
-            // แปลงรหัสสถานะเป็นข้อความที่เข้าใจง่าย
+            // แปลงรหัสสถานะเป็นข้อความที่เข้าใจง่าย โดยใช้ค่าคงที่จาก RefundConstants
             return statusCode switch
             {
-                1 => "Approved", // สถานะอนุมัติ
-                2 => "Rejected", // สถานะปฏิเสธ
-                _ => "Processing" // สถานะเริ่มต้นหรือกำลังดำเนินการ
+                RefundConstants.TransactionStatus.Approved => RefundConstants.CallbackStatus.Approved,
+                RefundConstants.TransactionStatus.Rejected => RefundConstants.CallbackStatus.Rejected,
+                _ => RefundConstants.CallbackStatus.Processing // สถานะเริ่มต้นหรือกำลังดำเนินการ
             };
         }
     }

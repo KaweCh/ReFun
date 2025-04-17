@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using XiaomiReFund.Application.Common.Interfaces;
 using XiaomiReFund.Application.Common.Models;
 using XiaomiReFund.Application.DTOs.Callback;
 using XiaomiReFund.Application.Interfaces.Services;
+using XiaomiReFund.Domain.Constants;
 using XiaomiReFund.Domain.Interfaces.Repositories;
 
 namespace XiaomiReFund.Application.Commands.Refund.UpdateRefundStatus
@@ -22,6 +24,7 @@ namespace XiaomiReFund.Application.Commands.Refund.UpdateRefundStatus
         private readonly ICurrentUserService _currentUserService;
         private readonly ILoggerService _logger;
         private readonly ICallbackService _callbackService;
+        private readonly CallbackSettings _callbackSettings;
 
         /// <summary>
         /// สร้าง UpdateRefundStatusCommandHandler ใหม่
@@ -30,16 +33,19 @@ namespace XiaomiReFund.Application.Commands.Refund.UpdateRefundStatus
         /// <param name="currentUserService">บริการข้อมูลผู้ใช้ปัจจุบัน</param>
         /// <param name="logger">บริการบันทึกข้อมูล</param>
         /// <param name="callbackService">บริการ callback</param>
+        /// <param name="callbackSettings">การตั้งค่า callback</param>
         public UpdateRefundStatusCommandHandler(
             IRefundRepository refundRepository,
             ICurrentUserService currentUserService,
             ILoggerService logger,
-            ICallbackService callbackService)
+            ICallbackService callbackService,
+            IOptions<CallbackSettings> callbackSettings)
         {
             _refundRepository = refundRepository;
             _currentUserService = currentUserService;
             _logger = logger;
             _callbackService = callbackService;
+            _callbackSettings = callbackSettings.Value;
         }
 
         /// <summary>
@@ -76,8 +82,12 @@ namespace XiaomiReFund.Application.Commands.Refund.UpdateRefundStatus
                 // สร้างคำขอ callback
                 var callbackRequest = new SendCallbackRequest
                 {
-                    Status = request.Status == 1 ? "Approved" : "Rejected",
-                    Msg = request.StatusRemark ?? (request.Status == 1 ? "Refund Approved" : "Refund Rejected"),
+                    Status = request.Status == RefundConstants.TransactionStatus.Approved
+                           ? RefundConstants.CallbackStatus.Approved
+                           : RefundConstants.CallbackStatus.Rejected,
+                    Msg = request.StatusRemark ?? (request.Status == RefundConstants.TransactionStatus.Approved
+                           ? "Refund Approved"
+                           : "Refund Rejected"),
                     TerminalID = refund.TerminalID,
                     TransactionDate = refund.TransactionDate.ToString("yyyy-MM-dd"),
                     TransactionID = refund.TransactionID,

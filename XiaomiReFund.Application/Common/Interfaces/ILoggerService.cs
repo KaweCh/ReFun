@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XiaomiReFund.Application.Common.Interfaces
 {
-    // อินเทอร์เฟซสำหรับบริการบันทึกログ
+    // อินเทอร์เฟซสำหรับบริการบันทึก
     // ออกแบบให้ครอบคลุมการบันทึกเหตุการณ์ต่างๆ ในระบบ
     public interface ILoggerService
     {
