@@ -217,7 +217,20 @@ namespace XiaomiReFund.Application.Services
             try
             {
                 // ดึงข้อมูลจากระบบคิวที่มีอยู่
-                return await _refundRepository.GetPendingCallbacksForProcessingAsync(count);
+                var pendingCallbacks = await _refundRepository.GetPendingCallbacksForProcessingAsync(count);
+
+                // แปลงจาก Domain Model ไปเป็น DTO
+                return pendingCallbacks.Select(c => new SendCallbackRequest
+                {
+                    Status = c.Status,
+                    Msg = c.StatusMessage,
+                    TerminalID = c.TerminalID,
+                    TransactionDate = c.TransactionDate.ToString("yyyy-MM-dd"),
+                    TransactionID = c.TransactionID,
+                    RefundAmount = c.RefundAmount,
+                    RequestID = c.RequestID,
+                    PaymentType = c.PaymentType
+                }).ToArray();
             }
             catch (Exception ex)
             {

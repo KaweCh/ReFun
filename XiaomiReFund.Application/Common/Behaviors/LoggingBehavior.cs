@@ -16,14 +16,14 @@ namespace XiaomiReFund.Application.Common.Behaviors
     public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        // ประกาศตัวแปรสำหรับบันทึกログแบบต่างๆ
-        // _logger: บันทึกログมาตรฐานของ .NET
+        // ประกาศตัวแปรสำหรับบันทึกแบบต่างๆ
+        // _logger: บันทึกมาตรฐานของ .NET
         private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
 
         // _currentUserService: บริการดึงข้อมูลผู้ใช้ปัจจุบัน
         private readonly ICurrentUserService _currentUserService;
 
-        // _loggerService: บริการบันทึกログแบบกำหนดเอง
+        // _loggerService: บริการบันทึกแบบกำหนดเอง
         private readonly ILoggerService _loggerService;
 
         // Constructor รับบริการต่างๆ ผ่าน Dependency Injection
