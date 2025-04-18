@@ -80,6 +80,11 @@ namespace XiaomiReFund.Infrastructure.Data.DbContext
         /// </summary>
         public DbSet<sys_Users_Status> UserStatuses { get; set; }
 
+        /// <summary>
+        /// ข้อมูลสถานะผู้ใช้
+        /// </summary>
+        public DbSet<rms_CallbackQueue> CallbackQueue { get; set; }
+
         #endregion
 
         /// <summary>
@@ -135,6 +140,22 @@ namespace XiaomiReFund.Infrastructure.Data.DbContext
 
             // ดักจับเอนทิตีที่มีการเพิ่มหรือแก้ไข เพื่ออัพเดต timestamp ให้อัตโนมัติ
             foreach (var entry in ChangeTracker.Entries<rmsAPI_Client_IP>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        // ใส่ข้อมูลวันที่สร้างอัตโนมัติ
+                        entry.Entity.CreateDate = _dateTime.Now;
+                        break;
+                    case EntityState.Modified:
+                        // อัพเดตข้อมูลวันที่แก้ไขอัตโนมัติ
+                        entry.Entity.UpdateDate = _dateTime.Now;
+                        break;
+                }
+            }
+
+            // ดักจับเอนทิตีที่มีการเพิ่มหรือแก้ไข เพื่ออัพเดต timestamp ให้อัตโนมัติ
+            foreach (var entry in ChangeTracker.Entries<rms_CallbackQueue>())
             {
                 switch (entry.State)
                 {

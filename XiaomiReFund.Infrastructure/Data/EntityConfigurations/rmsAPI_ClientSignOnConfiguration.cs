@@ -46,6 +46,18 @@ namespace XiaomiReFund.Infrastructure.Data.EntityConfigurations
                 .HasMaxLength(255)
                 .IsRequired();
 
+            builder.Property(e => e.ClientWebHook)
+                .HasMaxLength(255)
+                .IsRequired();
+
+            builder.Property(e => e.IsActiveWebHook)
+                .HasDefaultValue((byte)0)
+                .IsRequired();
+
+            builder.Property(e => e.SaltKey)
+                .HasMaxLength(255)
+                .IsRequired();
+
             builder.Property(e => e.VerifyIPAddress)
                 .HasDefaultValue(false);
 
