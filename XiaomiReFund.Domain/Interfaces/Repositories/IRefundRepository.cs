@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XiaomiReFund.Domain.Entities;
+using XiaomiReFund.Domain.Models;
 
 namespace XiaomiReFund.Domain.Interfaces.Repositories
 {
@@ -138,7 +139,7 @@ namespace XiaomiReFund.Domain.Interfaces.Repositories
         /// </summary>
         /// <param name="count">จำนวนที่ต้องการดึง</param>
         /// <returns>รายการข้อมูล callback ที่รอการส่ง</returns>
-        Task<SendCallbackRequest[]> GetPendingCallbacksForProcessingAsync(int count);
+        Task<PendingCallback[]> GetPendingCallbacksForProcessingAsync(int count);
 
         /// <summary>
         /// อัพเดตสถานะของ callback

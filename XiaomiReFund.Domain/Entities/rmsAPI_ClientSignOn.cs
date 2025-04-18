@@ -14,6 +14,9 @@ namespace XiaomiReFund.Domain.Entities
         public string ClientUserName { get;  set; }
         public string ClientPasswordHash { get;  set; }
         public string ClientToken { get;  set; }
+        public string ClientWebHook { get; set; }
+        public string IsActiveWebHook { get; set; }
+        public string SaltKey { get; set; }
         public bool VerifyIPAddress { get;  set; }
         public int ModifiedBy { get;  set; }
         public DateTime CreateDate { get;  set; }

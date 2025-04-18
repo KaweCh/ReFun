@@ -8,20 +8,20 @@ namespace XiaomiReFund.Domain.Entities
 {
     public class rmsAPI_Client_PaymentType
     {
-        public int SeqID { get; private set; }
-        public string TerminalID { get; private set; }
-        public string PaymentType { get; private set; }
-        public bool IsAllowed { get; private set; }
-        public int ModifiedBy { get; private set; }
-        public DateTime CreateDate { get; private set; }
-        public DateTime? UpdateDate { get; private set; }
+        public int SeqID { get;  set; }
+        public string TerminalID { get;  set; }
+        public string PaymentType { get;  set; }
+        public bool IsAllowed { get;  set; }
+        public int ModifiedBy { get;  set; }
+        public DateTime CreateDate { get;  set; }
+        public DateTime? UpdateDate { get;  set; }
 
         // Navigation properties
-        public virtual rmsAPI_Client_TerminalID Terminal { get; private set; }
-        public virtual rms_PaymentType PaymentTypeEntity { get; private set; }
-        public virtual sys_Users ModifiedByUser { get; private set; }
+        public virtual rmsAPI_Client_TerminalID Terminal { get;  set; }
+        public virtual rms_PaymentType PaymentTypeEntity { get;  set; }
+        public virtual sys_Users ModifiedByUser { get;  set; }
 
-        private rmsAPI_Client_PaymentType()
+        public rmsAPI_Client_PaymentType()
         {
             // Required by EF Core
         }

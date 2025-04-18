@@ -53,9 +53,11 @@ namespace XiaomiReFund.Domain.Constants
         {
             // สถานะต่างๆ ที่ใช้ใน API
             // ค่าเหล่านี้มาจากฐานข้อมูล rms_OrderRefundStatus
-            public const byte Processing = 0;
-            public const byte Approved = 1;
-            public const byte Rejected = 2;
+            public const byte Pending = 0;
+            public const byte Processing = 1;
+            public const byte Approved = 2;
+            public const byte Rejected = 3;
+            public const byte Failed = 4;
         }
 
         // ค่าคงที่อื่นๆ
